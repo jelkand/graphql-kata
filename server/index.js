@@ -1,42 +1,38 @@
 const express = require('express');
-const cors = require('cors');
-const graphqlHTTP = require('express-graphql');
-const gql = require('graphql-tag');
-const { buildASTSchema } = require('graphql');
+const { ApolloServer } = require('apollo-server-express');
+const schema = require('./graphql/schema');
+const resolvers = require('./graphql/resolvers');
+const mockDataService = require('./dataService/mockDataService');
+const argv = require('./argv');
+const port = require('./port');
+const setup = require('./middlewares/frontendMiddleware');
+const { resolve } = require('path');
 
-const POSTS = [
-  { author: "John Doe", body: "Hello world" },
-  { author: "Jane Doe", body: "Hi, planet!" },
-];
-
-const schema = buildASTSchema(gql`
-  type Query {
-    posts: [Post]
-    post(id: ID!): Post
-  }
-
-  type Post {
-    id: ID
-    author: String
-    body: String
-  }
-`);
-
-const mapPost = (post, id) => post && ({ id, ...post });
-
-const root = {
-  posts: () => POSTS.map(mapPost),
-  post: ({ id }) => mapPost(POSTS[id], id),
-};
+const server = new ApolloServer({
+  typeDefs: schema,
+  resolvers,
+  context: { dataService: mockDataService },
+});
 
 const app = express();
-app.use(cors());
-app.use('/graphql', graphqlHTTP({
-  schema,
-  rootValue: root,
-  graphiql: true,
-}));
+server.applyMiddleware({ app });
 
-const port = process.env.PORT || 4000
-app.listen(port);
+setup(app, {
+  outputPath: resolve(process.cwd(), 'build'),
+  publicPath: '/',
+});
+
+// get the intended host and port number, use localhost and port 3000 if not provided
+const customHost = argv.host || process.env.HOST;
+const host = customHost || null; // Let http.Server use its default IPv6/4 host
+
+// use the gzipped bundle
+app.get('*.js', (req, res, next) => {
+  req.url = req.url + '.gz'; // eslint-disable-line
+  res.set('Content-Encoding', 'gzip');
+  next();
+});
+
+// Start your app.
+app.listen(port, host);
 console.log(`Running a GraphQL API server at localhost:${port}/graphql`);
