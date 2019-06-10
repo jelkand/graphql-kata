@@ -35,7 +35,6 @@ const schema = gql`
     id: String!
     studentAssignment: StudentAssignment!
     score: Float
-    file: File
     createdAt: String!
   }
   type Todo {

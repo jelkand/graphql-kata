@@ -1,6 +1,5 @@
 const _ = require('lodash');
-const async  = require('express-async-await')
-const fetch = require('node-fetch')
+var fetch = require('node-fetch')
 
 const resolvers = {
   Query: {
@@ -33,7 +32,8 @@ const resolvers = {
       ),
       todos: async (student, args, ctx) => {
         const url = `https://jsonplaceholder.typicode.com/todos?userId=${student.id}`;
-        return await fetch(url);
+        return fetch(url)
+          .then(res => res.json());
       }
   },
   StudentAssignment: {
