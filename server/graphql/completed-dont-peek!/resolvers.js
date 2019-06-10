@@ -1,4 +1,6 @@
 const _ = require('lodash');
+const async  = require('express-async-await')
+const fetch = require('node-fetch')
 
 const resolvers = {
   Query: {
@@ -17,16 +19,11 @@ const resolvers = {
       ),
   },
   Mutation: {
-    submitAssignment: async (parent, { studentAssignmentId, file }, ctx) => {
-      const latestSubmissionId = _.last(ctx.dataService.submissions).id;
-      const submission = {
-        id: latestSubmissionId + 1,
-        studentAssignmentId,
-        file: await file, // would be better to ship the stream off to s3 etc here, but for now it's mocked so let's just leave it.
-      };
-      ctx.dataService.submissions.push(submission);
-      return submission;
-    },
+    updateStudent: (parent, args, ctx) => {
+      const studentIdx = _.findIndex(ctx.dataService.students, student => student.id === args.id);
+      _.assign(ctx.dataService.students[studentIdx], args);
+      return ctx.dataService.students[studentIdx];
+    }
   },
   Student: {
     studentAssignments: (student, args, ctx) =>
@@ -34,6 +31,10 @@ const resolvers = {
         ctx.dataService.studentAssignments,
         studentAssignment => studentAssignment.studentId === student.id,
       ),
+      todos: async (student, args, ctx) => {
+        const url = `https://jsonplaceholder.typicode.com/todos?userId=${student.id}`;
+        return await fetch(url);
+      }
   },
   StudentAssignment: {
     submissions: (studentAssignment, args, ctx) =>

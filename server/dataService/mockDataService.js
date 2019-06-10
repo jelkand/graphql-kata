@@ -1,23 +1,18 @@
-/*
-* Examples of the data model. Ideally the postgres table would be set up similarly.
-* There are a couple join tables, etc in here.
-*/
-
 const students = [
   {
-    id: '254ffc73-2942-4f5c-9cd5-351f2fba51af',
+    id: '0',
     firstName: 'Mike',
     lastName: 'Wazowski',
     createdAt: Date.now().toString(),
   },
   {
-    id: '3075d637-d621-4aa7-883d-e035a6222efd',
+    id: '1',
     firstName: 'Inigo',
     lastName: 'Montoya',
     createdAt: Date.now().toString(),
   },
   {
-    id: '6c9e48b4-4049-409e-9d1c-60ac8f553b07',
+    id: '2',
     firstName: 'Darth',
     lastName: 'Vader',
     createdAt: Date.now().toString(),
@@ -25,7 +20,7 @@ const students = [
 ];
 
 const assignments = [
-  { id: '0', name: 'Your first assignment', createdAt: Date.now().toString() }, // Date.now is suboptimal but will do until I hook in momentjs
+  { id: '0', name: 'Your first assignment', createdAt: Date.now().toString() },
   {
     id: '1',
     name: 'Moving up in the world!',
@@ -37,31 +32,31 @@ const assignments = [
 const studentAssignments = [
   {
     id: '0',
-    studentId: '254ffc73-2942-4f5c-9cd5-351f2fba51af',
+    studentId: '0',
     assignmentId: '0',
     createdAt: Date.now().toString(),
   },
   {
     id: '1',
-    studentId: '254ffc73-2942-4f5c-9cd5-351f2fba51af',
+    studentId: '0',
     assignmentId: '1',
     createdAt: Date.now().toString(),
   },
   {
     id: '2',
-    studentId: '254ffc73-2942-4f5c-9cd5-351f2fba51af',
+    studentId: '0',
     assignmentId: '2',
     createdAt: Date.now().toString(),
   },
   {
     id: '3',
-    studentId: '3075d637-d621-4aa7-883d-e035a6222efd',
+    studentId: '1',
     assignmentId: '0',
     createdAt: Date.now().toString(),
   },
   {
     id: '4',
-    studentId: '3075d637-d621-4aa7-883d-e035a6222efd',
+    studentId: '1',
     assignmentId: '1',
     createdAt: Date.now().toString(),
   },

@@ -3,24 +3,20 @@ const { gql } = require('apollo-server-express');
 const schema = gql`
   type Query {
     students: [Student]
-    student(id: String): Student
-    studentAssignmentsByStudent(studentId: String): [StudentAssignment]
-    studentAssignment(id: String): StudentAssignment
+    student(id: String!): Student
+    studentAssignmentsByStudent(studentId: String!): [StudentAssignment]
+    studentAssignment(id: String!): StudentAssignment
   }
   type Mutation {
-    submitAssignment(studentAssignmentId: String!, file: Upload!): Submission!
-  }
-  type File {
-    filename: String!
-    mimetype: String!
-    encoding: String!
+    updateStudent(id: String!, firstName: String, lastName: String): Student
   }
   type Student {
-    id: String! # UUID v4
+    id: String!
     firstName: String!
     lastName: String!
     createdAt: String!
     studentAssignments: [StudentAssignment]
+    todos: [Todo]
   }
   type Assignment {
     id: String!
@@ -41,6 +37,12 @@ const schema = gql`
     score: Float
     file: File
     createdAt: String!
+  }
+  type Todo {
+    userId: String!
+    id: String!
+    title: String
+    completed: Boolean
   }
 `;
 

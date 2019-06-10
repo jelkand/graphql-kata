@@ -12,10 +12,6 @@ Write a schema on the backend, and query it from the API explorer.
 
 Write a mutation, and update from the API explorer.
 
-### Exercise 3:
-
-Use Apollo to request the information and feed it into a react component.
-
 ### Exercise 4:
 
 Extend the query using a third party API

@@ -12,6 +12,12 @@ const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
   context: { dataService: mockDataService },
+  playground: {
+    endpoint: `http://localhost:${port}/graphql`,
+    settings: {
+      'editor.theme': 'light'
+    }
+  }
 });
 
 const app = express();
